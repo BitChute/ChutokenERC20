@@ -60,4 +60,18 @@ contract Chutoken {
         return true;
 	}
 
+	function splitTransfer(address _to, address _platform, uint256 _value, uint256 _fee) public returns (bool success) {
+		uint256 _total = _value + _fee;
+		require(balanceOf[msg.sender] >= _total);
+
+		balanceOf[msg.sender] -= _total;
+		balanceOf[_to] += _value;
+		balanceOf[_platform] += _fee;
+
+		emit Transfer(msg.sender, _to, _value);
+		emit Transfer(msg.sender, _platform, _fee);
+
+		return true;
+	}
+
 }

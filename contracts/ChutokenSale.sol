@@ -31,7 +31,7 @@ contract ChutokenSale {
     function endSale() public {
         require(msg.sender == admin, "only admin can end the sale");
     	require(tokenContract.transfer(admin, tokenContract.balanceOf(address(this))),"failed to transfer balance");
-        //admin.transfer(address(this).balance);
+        admin.transfer(address(this).balance);
         selfdestruct(admin);
     }
 }

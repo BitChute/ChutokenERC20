@@ -113,4 +113,15 @@ contract('Chutoken', function(accounts) {
       		assert.equal(allowance.toNumber(), 0, 'deducts the amount from the allowance');
     	});
   	});
+
+	it('splits transfer of tokens between recipient and platform', function() {
+		return Chutoken.deployed().then(function(instance) {
+			tokenInstance = instance;
+			// Test trasfer more than the owners balance
+			return tokenInstance.splitTransfer.call(accounts[1], accounts[2], 9999999999, 999);
+		}).then(assert.fail).catch(function(error) {
+			assert(error.message.indexOf('revert') >= 0, 'error message must contain revert');	
+		});
+	});
+
 });
