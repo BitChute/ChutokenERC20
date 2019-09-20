@@ -111,7 +111,10 @@ contract('Chutoken', function(accounts) {
       		return tokenInstance.allowance(fromAccount, spendingAccount);
     	}).then(function(allowance) {
       		assert.equal(allowance.toNumber(), 0, 'deducts the amount from the allowance');
-    	});
+      		return tokenInstance.balanceOf(accounts[0]);
+    	}).then(function(balance) {
+			assert.equal(balance.toNumber(), 3141591553, 'deducts the amount from the sending account');
+		});
   	});
 
 	it('splits transfer of tokens between recipient and platform', function() {
@@ -121,6 +124,26 @@ contract('Chutoken', function(accounts) {
 			return tokenInstance.splitTransfer.call(accounts[1], accounts[2], 9999999999, 999);
 		}).then(assert.fail).catch(function(error) {
 			assert(error.message.indexOf('revert') >= 0, 'error message must contain revert');	
+			return tokenInstance.splitTransfer(accounts[1], accounts[2], 1000, 100);
+		}).then(function(receipt) {
+			assert.equal(receipt.logs.length, 2, 'triggers two events');
+			assert.equal(receipt.logs[0].event, 'Transfer', 'should be the "Transfer" event');
+			assert.equal(receipt.logs[0].args._from, accounts[0], 'logs the transfer origin account');
+			assert.equal(receipt.logs[0].args._to, accounts[1], 'logs the transfer destination account');
+			assert.equal(receipt.logs[0].args._value, 1000, 'logs the transfer amount'); 
+			assert.equal(receipt.logs[1].event, 'Transfer', 'should be the "Transfer" event');
+			assert.equal(receipt.logs[1].args._from, accounts[0], 'logs the transfer origin account');
+			assert.equal(receipt.logs[1].args._to, accounts[2], 'logs the platform destination account');
+			assert.equal(receipt.logs[1].args._value, 100, 'logs the platform fee amount');
+			return tokenInstance.balanceOf(accounts[1]);
+		}).then(function(balance) {
+			assert.equal(balance.toNumber(), 2000, 'adds the amount to the destination address');
+			return tokenInstance.balanceOf(accounts[0]);
+		}).then(function(balance) {
+			assert.equal(balance.toNumber(), 3141590453, 'deducts the amount from the sending account');
+			return tokenInstance.balanceOf(accounts[2]);
+		}).then(function(balance) {
+			assert.equal(balance.toNumber(), 190, 'adds the amount to the platform address');
 		});
 	});
 
