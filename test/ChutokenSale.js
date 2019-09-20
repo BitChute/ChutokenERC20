@@ -6,7 +6,7 @@ contract('ChutokenSale', function(accounts) {
 	var tokenSaleInstance;
 	var admin = accounts[0];
 	var buyer = accounts[1];
-	var tokenPrice = 1000000000000000; // in wei
+	var tokenPrice = 1000000000000000; // in wei, change to $
 	var tokensAvailable = 1000000;
 	var numberOfTokens;
 
