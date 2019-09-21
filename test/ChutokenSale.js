@@ -9,6 +9,7 @@ contract('ChutokenSale', function(accounts) {
 	var tokenPrice = 1000000000000000; // in wei, change to $
 	var tokensAvailable = 1000000;
 	var numberOfTokens;
+	var dollarValue = 1000000000000000;
 
 	it('init contract with the correct values',function() {
 		return ChutokenSale.deployed().then(function(instance) {
@@ -22,8 +23,23 @@ contract('ChutokenSale', function(accounts) {
 			return tokenSaleInstance.tokenPrice();
 		}).then(function(price) {
 			assert.equal(price, tokenPrice, 'token price is correct');
-		});
+			return tokenSaleInstance.tokenPrice(); 
+		})
 	});
+
+	it('sets the token price with the latest $ value', function() {
+    	return Chutoken.deployed().then(function(instance) {
+      		// Grab token instance first
+      		tokenInstance = instance;
+      		return ChutokenSale.deployed();
+    	}).then(function(instance) {
+    		tokenSaleInstance = instance;
+    		tokenSaleInstance.setTokenPrice(2000000000000000);
+    		return tokenSaleInstance.tokenPrice();
+    	}).then(function(price) {
+    		assert.equal(price, 2000000000000000, 'the new price value is correct');
+    	});
+    });
 
 	it('facilitates token buying', function() {
     	return Chutoken.deployed().then(function(instance) {
