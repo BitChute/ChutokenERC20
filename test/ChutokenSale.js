@@ -9,7 +9,6 @@ contract('ChutokenSale', function(accounts) {
 	var tokenPrice = 1000000000000000; // in wei, change to $
 	var tokensAvailable = 1000000;
 	var numberOfTokens;
-	var dollarValue = 1000000000000000;
 
 	it('init contract with the correct values',function() {
 		return ChutokenSale.deployed().then(function(instance) {

@@ -7,7 +7,6 @@ contract ChutokenSale {
     Chutoken public tokenContract;
     uint256 public tokenPrice;
     uint256 public tokensSold;
-    uint256 public dollarValue;
 
     event Sell(address _buyer, uint256 _amount);
 
@@ -33,11 +32,4 @@ contract ChutokenSale {
     	require(msg.sender == admin);
     	tokenPrice = _value;
     } 
-
-    //function endSale() public {
-    //    require(msg.sender == admin, "only admin can end the sale");
-    //	  require(tokenContract.transfer(admin, tokenContract.balanceOf(address(this))),"failed to transfer balance");
-    //    admin.transfer(address(this).balance);
-    //    selfdestruct(admin);
-    //}
 }

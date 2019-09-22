@@ -5,6 +5,7 @@ contract Chutoken {
 	string public name = "Chutoken";
 	string public symbol = 'CHUTE';
 	string public standard = 'Chutoken v1.0';
+	uint8 public decimals = 5;
 	uint256 public totalSupply;
 
 	event Transfer (
@@ -22,9 +23,9 @@ contract Chutoken {
 	mapping (address => uint256) public balanceOf;
 	mapping (address => mapping(address => uint256)) public allowance;
 
-	constructor (uint256 _initialSupply) public {
-		balanceOf[msg.sender] = _initialSupply;
-		totalSupply = _initialSupply;
+	constructor () public {
+		totalSupply = 3141592653 * 10**uint(decimals);
+		balanceOf[msg.sender] = totalSupply;
 	}
 
 	function transfer(address _to, uint256 _value) public returns (bool success) {
